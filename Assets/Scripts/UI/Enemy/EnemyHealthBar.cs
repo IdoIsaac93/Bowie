@@ -1,0 +1,30 @@
+using UnityEngine;
+using UnityEngine.UI;
+
+public class EnemyHealthBar : MonoBehaviour
+{
+    Slider slider;
+    private Transform cam;
+
+    void Start()
+    {
+        //Finds the camera
+        cam = GameObject.FindWithTag("MainCamera").transform;
+        slider = GetComponent<Slider>();
+    }
+
+    public void SetMaxHealth(int maxHealth)
+    {
+        slider.maxValue = maxHealth;
+        slider.value = maxHealth;
+    }
+
+    public void SetHealth(int enemyHealth)
+    {
+        slider.value = enemyHealth;
+    }
+    void LateUpdate()
+    {
+        transform.LookAt(transform.position + cam.forward);
+    }
+}
