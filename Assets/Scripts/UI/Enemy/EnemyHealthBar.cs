@@ -3,10 +3,10 @@ using UnityEngine.UI;
 
 public class EnemyHealthBar : MonoBehaviour
 {
-    Slider slider;
+    [SerializeField] Slider slider;
     private Transform cam;
 
-    void Start()
+    void Awake()
     {
         //Finds the camera
         cam = GameObject.FindWithTag("MainCamera").transform;

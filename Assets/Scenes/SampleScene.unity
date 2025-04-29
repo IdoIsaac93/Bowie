@@ -1445,6 +1445,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbce4635d4b1cc5438aa95978ffff0b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slider: {fileID: 0}
 --- !u!114 &196633216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2670,6 +2671,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbce4635d4b1cc5438aa95978ffff0b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slider: {fileID: 0}
 --- !u!114 &337482969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3345,7 +3347,7 @@ GameObject:
   - component: {fileID: 390033327}
   - component: {fileID: 390033329}
   - component: {fileID: 390033328}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3617,7 +3619,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 398543479}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: WeaponLoadout
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3661,7 +3663,7 @@ GameObject:
   - component: {fileID: 404627188}
   - component: {fileID: 404627190}
   - component: {fileID: 404627189}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4707,7 +4709,7 @@ GameObject:
   - component: {fileID: 481397929}
   - component: {fileID: 481397931}
   - component: {fileID: 481397930}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: LoseScreen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5162,7 +5164,7 @@ GameObject:
   - component: {fileID: 579963186}
   - component: {fileID: 579963188}
   - component: {fileID: 579963187}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: ExperienceCounter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5997,7 +5999,7 @@ GameObject:
   - component: {fileID: 703886842}
   - component: {fileID: 703886844}
   - component: {fileID: 703886843}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6441,7 +6443,7 @@ GameObject:
   - component: {fileID: 734047119}
   - component: {fileID: 734047122}
   - component: {fileID: 734047121}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Spotlight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6900,7 +6902,7 @@ GameObject:
   - component: {fileID: 824190742}
   - component: {fileID: 824190744}
   - component: {fileID: 824190743}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7208,7 +7210,7 @@ GameObject:
   - component: {fileID: 833877139}
   - component: {fileID: 833877141}
   - component: {fileID: 833877140}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7651,7 +7653,7 @@ GameObject:
   - component: {fileID: 840482832}
   - component: {fileID: 840482831}
   - component: {fileID: 840482830}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Weapon2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7993,7 +7995,7 @@ GameObject:
   m_Component:
   - component: {fileID: 882252626}
   - component: {fileID: 882252627}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: WeaponSlider4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8215,7 +8217,7 @@ GameObject:
   - component: {fileID: 913614158}
   - component: {fileID: 913614160}
   - component: {fileID: 913614159}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8357,6 +8359,8 @@ GameObject:
   - component: {fileID: 936349977}
   - component: {fileID: 936349976}
   - component: {fileID: 936349978}
+  - component: {fileID: 936349979}
+  - component: {fileID: 936349980}
   m_Layer: 3
   m_Name: TempPlayer
   m_TagString: Player
@@ -8569,8 +8573,7 @@ MonoBehaviour:
   weaponTransform: {fileID: 1321404806}
   firePoint: {fileID: 1104516869}
   input: {fileID: 11400000, guid: 3cdee12201d259949b7510a3dbe0deb3, type: 2}
-  trajectoryLineRenderer: {fileID: 1321404808}
-  trajectoryPointPrefab: {fileID: 7921388633243942628, guid: 04b784f8862931742a6ef6965ac623bf, type: 3}
+  trajectoryVisuals: {fileID: 936349979}
   arrowEntries:
   - arrowType: 0
     arrowPrefab: {fileID: 7953235454536151882, guid: 5592d938b31f3434b980ceb58a555b3b, type: 3}
@@ -8583,16 +8586,146 @@ MonoBehaviour:
   - arrowType: 4
     arrowPrefab: {fileID: 1890854466414649019, guid: bfc3a5f7240e2174d8e7f8aa32e9a410, type: 3}
   - arrowType: 5
-    arrowPrefab: {fileID: 169077354849001419, guid: 1a3c24d257b70a14bb8fe7307f405c29, type: 3}
+    arrowPrefab: {fileID: 3643894867364006696, guid: 1a3c24d257b70a14bb8fe7307f405c29, type: 3}
   - arrowType: 6
-    arrowPrefab: {fileID: 1113151606805337230, guid: 139b561812468c143888294ab3756a45, type: 3}
+    arrowPrefab: {fileID: 83409994843958535, guid: 139b561812468c143888294ab3756a45, type: 3}
   currentArrowType: 0
   currentArrowheadIndex: 0
   arrowRestPosition: {x: 2.5, y: 0, z: 0}
   arrowPulledPosition: {x: 1, y: 0, z: 0}
-  numberOfPoints: 30
-  distanceBetweenPoints: 0.2
-  trajectoryVisual: []
+--- !u!114 &936349979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 936349968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86bf331800bb46640809ac1ad9ab3449, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lineRenderer: {fileID: 936349980}
+  lineSegmentCount: 20
+  timeStep: 0.1
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 247
+--- !u!120 &936349980
+LineRenderer:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 936349968}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 0
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a1a082faf1387e54090648ee527923c2, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Positions:
+  - {x: 0, y: 0, z: 0}
+  m_Parameters:
+    serializedVersion: 3
+    widthMultiplier: 1
+    widthCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0.31288528
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 0.17178345
+        inSlope: -0.01773404
+        outSlope: -0.01773404
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.21078992
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    colorGradient:
+      serializedVersion: 2
+      key0: {r: 1, g: 1, b: 1, a: 1}
+      key1: {r: 1, g: 1, b: 1, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 65535
+      ctime2: 0
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_ColorSpace: -1
+      m_NumColorKeys: 2
+      m_NumAlphaKeys: 2
+    numCornerVertices: 0
+    numCapVertices: 0
+    alignment: 0
+    textureMode: 0
+    textureScale: {x: 1, y: 1}
+    shadowBias: 0.5
+    generateLightingData: 0
+  m_MaskInteraction: 0
+  m_UseWorldSpace: 1
+  m_Loop: 0
+  m_ApplyActiveColorSpace: 1
 --- !u!1 &952315702
 GameObject:
   m_ObjectHideFlags: 0
@@ -8961,7 +9094,7 @@ GameObject:
   m_Component:
   - component: {fileID: 969404148}
   - component: {fileID: 969404149}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: WeaponSlider3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9395,7 +9528,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1001711697}
   - component: {fileID: 1001711698}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: WeaponSlider1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10455,7 +10588,7 @@ GameObject:
   - component: {fileID: 1104516871}
   m_Layer: 3
   m_Name: TempBow
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10539,7 +10672,7 @@ GameObject:
   - component: {fileID: 1111184569}
   - component: {fileID: 1111184571}
   - component: {fileID: 1111184570}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11343,7 +11476,7 @@ GameObject:
   - component: {fileID: 1186530042}
   - component: {fileID: 1186530041}
   - component: {fileID: 1186530040}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Weapon7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11477,7 +11610,7 @@ GameObject:
   - component: {fileID: 1195967638}
   - component: {fileID: 1195967637}
   - component: {fileID: 1195967636}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Weapon6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11748,7 +11881,7 @@ GameObject:
   - component: {fileID: 1203551189}
   - component: {fileID: 1203551191}
   - component: {fileID: 1203551190}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: BlindBackground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11823,7 +11956,7 @@ GameObject:
   - component: {fileID: 1204760862}
   - component: {fileID: 1204760864}
   - component: {fileID: 1204760863}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12416,7 +12549,7 @@ GameObject:
   - component: {fileID: 1240011244}
   - component: {fileID: 1240011246}
   - component: {fileID: 1240011245}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13013,7 +13146,7 @@ GameObject:
   - component: {fileID: 1298813970}
   - component: {fileID: 1298813972}
   - component: {fileID: 1298813971}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13128,6 +13261,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbce4635d4b1cc5438aa95978ffff0b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slider: {fileID: 0}
 --- !u!114 &1306296059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13191,7 +13325,7 @@ GameObject:
   - component: {fileID: 1315689440}
   - component: {fileID: 1315689439}
   - component: {fileID: 1315689438}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Blind
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13291,10 +13425,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1321404806}
-  - component: {fileID: 1321404808}
   m_Layer: 3
   m_Name: Weapon
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13313,115 +13446,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1104516869}
-  - {fileID: 1678699579}
   m_Father: {fileID: 936349974}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!120 &1321404808
-LineRenderer:
-  serializedVersion: 2
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1321404805}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 0
-  m_LightProbeUsage: 0
-  m_ReflectionProbeUsage: 0
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: a1a082faf1387e54090648ee527923c2, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Positions:
-  - {x: 0, y: 0, z: 0}
-  m_Parameters:
-    serializedVersion: 3
-    widthMultiplier: 1
-    widthCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0.2687111
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    colorGradient:
-      serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 1}
-      key2: {r: 0, g: 0, b: 0, a: 0}
-      key3: {r: 0, g: 0, b: 0, a: 0}
-      key4: {r: 0, g: 0, b: 0, a: 0}
-      key5: {r: 0, g: 0, b: 0, a: 0}
-      key6: {r: 0, g: 0, b: 0, a: 0}
-      key7: {r: 0, g: 0, b: 0, a: 0}
-      ctime0: 0
-      ctime1: 65535
-      ctime2: 0
-      ctime3: 0
-      ctime4: 0
-      ctime5: 0
-      ctime6: 0
-      ctime7: 0
-      atime0: 0
-      atime1: 65535
-      atime2: 0
-      atime3: 0
-      atime4: 0
-      atime5: 0
-      atime6: 0
-      atime7: 0
-      m_Mode: 0
-      m_ColorSpace: -1
-      m_NumColorKeys: 2
-      m_NumAlphaKeys: 2
-    numCornerVertices: 0
-    numCapVertices: 0
-    alignment: 0
-    textureMode: 0
-    textureScale: {x: 1, y: 1}
-    shadowBias: 0.5
-    generateLightingData: 0
-  m_MaskInteraction: 0
-  m_UseWorldSpace: 1
-  m_Loop: 0
-  m_ApplyActiveColorSpace: 1
 --- !u!1 &1338294183
 GameObject:
   m_ObjectHideFlags: 0
@@ -13611,6 +13637,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbce4635d4b1cc5438aa95978ffff0b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slider: {fileID: 0}
 --- !u!114 &1354234774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13672,7 +13699,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1360460138}
   - component: {fileID: 1360460139}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: WeaponSlider2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14002,7 +14029,7 @@ GameObject:
   - component: {fileID: 1383571062}
   - component: {fileID: 1383571064}
   - component: {fileID: 1383571063}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14320,7 +14347,7 @@ GameObject:
   - component: {fileID: 1432235009}
   - component: {fileID: 1432235011}
   - component: {fileID: 1432235010}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15068,7 +15095,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1520732480}
   - component: {fileID: 1520732481}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: WeaponSlider6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15793,7 +15820,7 @@ GameObject:
   - component: {fileID: 1592056718}
   - component: {fileID: 1592056717}
   - component: {fileID: 1592056716}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Weapon4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16179,7 +16206,7 @@ GameObject:
   - component: {fileID: 1636080954}
   - component: {fileID: 1636080953}
   - component: {fileID: 1636080952}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Weapon1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16352,6 +16379,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbce4635d4b1cc5438aa95978ffff0b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slider: {fileID: 0}
 --- !u!114 &1640166807
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16638,37 +16666,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!1 &1678699578
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1678699579}
-  m_Layer: 3
-  m_Name: TrajectoryVisuals
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1678699579
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1678699578}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1321404806}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1691032762
 GameObject:
   m_ObjectHideFlags: 0
@@ -16950,7 +16947,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1695216532}
   - component: {fileID: 1695216533}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: WeaponSlider7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17038,7 +17035,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1698471114}
   - component: {fileID: 1698471115}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: WeaponSlider5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17127,7 +17124,7 @@ GameObject:
   - component: {fileID: 1716240518}
   - component: {fileID: 1716240520}
   - component: {fileID: 1716240519}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17264,7 +17261,7 @@ GameObject:
   - component: {fileID: 1716699398}
   - component: {fileID: 1716699397}
   - component: {fileID: 1716699396}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: HUDCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17944,6 +17941,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbce4635d4b1cc5438aa95978ffff0b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slider: {fileID: 0}
 --- !u!114 &1742440975
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18074,7 +18072,7 @@ GameObject:
   - component: {fileID: 1753246168}
   - component: {fileID: 1753246170}
   - component: {fileID: 1753246169}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18678,7 +18676,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1846650138}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: LoseScreenContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19028,6 +19026,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbce4635d4b1cc5438aa95978ffff0b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slider: {fileID: 0}
 --- !u!114 &1859553190
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19091,7 +19090,7 @@ GameObject:
   - component: {fileID: 1881247682}
   - component: {fileID: 1881247681}
   - component: {fileID: 1881247680}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Weapon3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19865,7 +19864,7 @@ GameObject:
   - component: {fileID: 1937853499}
   - component: {fileID: 1937853501}
   - component: {fileID: 1937853500}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20042,7 +20041,7 @@ GameObject:
   - component: {fileID: 1965049015}
   - component: {fileID: 1965049017}
   - component: {fileID: 1965049016}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20326,6 +20325,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbce4635d4b1cc5438aa95978ffff0b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slider: {fileID: 1975021495}
 --- !u!114 &1975021495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20520,7 +20520,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1987019999}
   - component: {fileID: 1987020001}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21007,7 +21007,7 @@ GameObject:
   - component: {fileID: 2025408176}
   - component: {fileID: 2025408178}
   - component: {fileID: 2025408177}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21348,7 +21348,7 @@ GameObject:
   - component: {fileID: 2069982470}
   - component: {fileID: 2069982469}
   - component: {fileID: 2069982468}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Weapon5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21591,7 +21591,7 @@ GameObject:
   - component: {fileID: 2075322620}
   - component: {fileID: 2075322622}
   - component: {fileID: 2075322621}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}

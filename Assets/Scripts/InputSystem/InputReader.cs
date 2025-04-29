@@ -36,12 +36,12 @@ public class InputReader : ScriptableObject, IPlayerActions
             input.Player.SetCallbacks(this);
         }
 
-        input.Enable();
+        input.Player.Enable();
     }
 
     //Enable and disable inputs
-    public void EnablePlayerActions() => input.Enable();
-    public void DisablePlayerActions() => input.Disable();
+    public void EnablePlayerActions() => input.Player.Enable();
+    public void DisablePlayerActions() => input.Player.Disable();
 
     //These methods decide what to do when an input is received
     //Most simply call the event which will then be handled in whatever script is listening to that event

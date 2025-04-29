@@ -1,14 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
-
-[System.Serializable]
-public class ArrowEntry
-{
-    public ArrowType arrowType;
-    public Arrow arrowPrefab;
-}
 
 public class WeaponController : MonoBehaviour
 {
@@ -17,8 +9,7 @@ public class WeaponController : MonoBehaviour
     [SerializeField] private Transform weaponTransform;
     [SerializeField] private Transform firePoint;
     [SerializeField] private InputReader input;
-    [SerializeField] private LineRenderer trajectoryLineRenderer;
-    [SerializeField] private GameObject trajectoryPointPrefab;
+    [SerializeField] private TrajectoryVisuals trajectoryVisuals;
     private PlayerStats playerStats;
     private PlayerController playerController;
 
@@ -37,35 +28,24 @@ public class WeaponController : MonoBehaviour
     private bool isDrawing = false;
     private bool isShooting = false;
     private bool isDrawPaused = false;
+    private bool isAimLocked = false;
+
     //Arrow nocking
     private Arrow currentArrowInstance;
-    [SerializeField] private Vector3 arrowRestPosition = new Vector3(2.5f, 0, 0);
-    [SerializeField] private Vector3 arrowPulledPosition = new Vector3(1f, 0, 0);
-
-    //Trajectory Visuals
-    [Header("Trajectory Visuals")]
-    [SerializeField] private int numberOfPoints = 30;
-    [SerializeField] private float distanceBetweenPoints = 0.2f;
-    [SerializeField] private GameObject[] trajectoryVisual;
+    [SerializeField] private Vector3 arrowRestPosition = new(2.5f, 0, 0);
+    [SerializeField] private Vector3 arrowPulledPosition = new(1f, 0, 0);
 
     private void Awake()
     {
         //Get references
         playerStats = GetComponent<PlayerStats>();
         playerController = GetComponent<PlayerController>();
+        trajectoryVisuals = GetComponent<TrajectoryVisuals>();
 
         //Debugging in case reference is missing
         if (playerStats == null) Debug.LogWarning("WeaponController is missing a PlayerStats reference");
         if (playerController == null) Debug.LogWarning("WeaponController is missing a PlayerController reference");
-
-        //Initialize the trajectory visuals
-        trajectoryVisual = new GameObject[numberOfPoints];
-        for (int i = 0; i < numberOfPoints; i++)
-        {
-            trajectoryVisual[i] = Instantiate(trajectoryPointPrefab, firePoint.position, Quaternion.identity, transform.Find("Weapon/TrajectoryVisuals"));
-            trajectoryVisual[i].SetActive(false);
-        }
-        trajectoryLineRenderer.positionCount = numberOfPoints;
+        if (trajectoryVisuals == null) Debug.LogWarning("WeaponController is missing a TrajectoryVisuals reference");
 
         // Subscribe to events
         input.DrawBowStarted += StartDraw;
@@ -117,21 +97,21 @@ public class WeaponController : MonoBehaviour
             //Increase draw strength when not paused and below the max draw
             if (!isDrawPaused && currentLaunchVelocity < playerStats.MaxLaunchVelocity)
             {
-                //Increase draw
                 launchVelocityTimer += Time.deltaTime * playerStats.DrawSpeed;
                 currentLaunchVelocity = Mathf.Lerp(playerStats.MinLaunchVelocity, playerStats.MaxLaunchVelocity, launchVelocityTimer);
-                
-                //Slowly pull the arrow back from rest position to pulled position
-                if (currentArrowInstance != null)
-                {
-                    float drawPercent = Mathf.InverseLerp(playerStats.MinLaunchVelocity, playerStats.MaxLaunchVelocity, currentLaunchVelocity);
-                    currentArrowInstance.transform.localPosition = Vector3.Lerp(arrowRestPosition, arrowPulledPosition, drawPercent);
-                }
             }
 
-            //Update the shoot direction and the trajectory visuals
+            //Update shoot direction and trajectory visuals
             shootDirection = weaponTransform.right * currentLaunchVelocity;
-            UpdateTrajectory();
+            Vector3 startingPosition = currentArrowInstance != null ? currentArrowInstance.transform.position : firePoint.position;
+            trajectoryVisuals.UpdateTrajectory(startingPosition, shootDirection);
+        }
+
+        //Slowly pull the arrow back from rest position to pulled position
+        if (currentArrowInstance != null)
+        {
+            float drawPercent = Mathf.InverseLerp(playerStats.MinLaunchVelocity, playerStats.MaxLaunchVelocity, currentLaunchVelocity);
+            currentArrowInstance.transform.localPosition = Vector3.Lerp(arrowRestPosition, arrowPulledPosition, drawPercent);
         }
     }
 
@@ -146,14 +126,6 @@ public class WeaponController : MonoBehaviour
         currentLaunchVelocity = playerStats.MinLaunchVelocity;
 
         //Instantiate and nock the arrow
-        Arrow arrowPrefab = allWeapons[currentArrowType];
-
-        //currentArrowInstance = Instantiate(arrowPrefab, weaponTransform);
-        ////Change arrow position
-        //currentArrowInstance.transform.localPosition = arrowRestPosition;
-        ////Change arrow rotation
-        //currentArrowInstance.transform.localRotation = Quaternion.Euler(0, 90, 0);
-
         currentArrowInstance = ObjectPooler.Instance.SpawnFromPool(currentArrowType, firePoint.position, weaponTransform.rotation * Quaternion.Euler(0, 90, 0)).GetComponent<Arrow>();
         currentArrowInstance.ResetArrow();
         currentArrowInstance.transform.SetParent(weaponTransform);
@@ -167,13 +139,14 @@ public class WeaponController : MonoBehaviour
         Rigidbody arrowRb = currentArrowInstance.GetComponent<Rigidbody>();
         arrowRb.isKinematic = true;
         //Activate trajectory visuals
-        foreach (var point in trajectoryVisual)
-            point.SetActive(true);
-        trajectoryLineRenderer.enabled = true;
+        trajectoryVisuals.Show();
     }
 
     private void AimWeaponTowardMouse()
     {
+        //Don't aim if locked
+        if (isAimLocked) return;
+
         //Get the mouse position and aim towards it
         Vector3 mousePos = Input.mousePosition;
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, weaponTransform.position.z - Camera.main.transform.position.z));
@@ -216,6 +189,8 @@ public class WeaponController : MonoBehaviour
         isDrawing = false;
         isShooting = true;
 
+        //trajectoryVisuals.Hide();
+
         StartCoroutine(ShootCoroutine());
     }
 
@@ -223,28 +198,100 @@ public class WeaponController : MonoBehaviour
     {
         if (currentArrowInstance == null) yield break;
 
-        //Disable trajectory visuals
-        foreach (var point in trajectoryVisual)
-            point.SetActive(false);
-        trajectoryLineRenderer.enabled = false;
-
         // Detach and fire the nocked arrow
-        currentArrowInstance.transform.parent = null;
-        //Enable physics
-        Rigidbody rb = currentArrowInstance.GetComponent<Rigidbody>();
-        rb.isKinematic = false;
-        //Add velocity
-        rb.AddForce(shootDirection, ForceMode.VelocityChange);
-        //Enable collision
-        currentArrowInstance.GetComponent<Collider>().enabled = true;
+        FireArrow(currentArrowInstance, shootDirection);
 
-        //Reset the current nocked arrow
+        // Check if the arrow is a repeating type
+        currentArrowInstance.TryGetComponent(out RepeatingArrow repeatingArrow);
+
+        // Reset the current nocked arrow reference
         currentArrowInstance = null;
 
-        //Wait the firing delay
-        yield return new WaitForSeconds(playerStats.DelayBetweenShots);
+        // If the arrow is repeating, fire additional arrows
+        if (repeatingArrow != null)
+        {
+            // Cache shoot data for consistency across repeated shots
+            Vector3 cachedShootDirection = shootDirection;
+            Quaternion cachedRotation = weaponTransform.rotation;
+            float cachedDrawPercent = Mathf.InverseLerp(playerStats.MinLaunchVelocity, playerStats.MaxLaunchVelocity, currentLaunchVelocity);
+
+            // Lock aim while repeating arrows are fired
+            isAimLocked = true;
+            yield return StartCoroutine(RepeatArrowsCoroutine(repeatingArrow, cachedShootDirection, cachedRotation, cachedDrawPercent));
+            isAimLocked = false;
+        }
+
+        // Wait the firing delay before allowing next action
         isShooting = false;
+        yield return new WaitForSeconds(playerStats.DelayBetweenShots);
     }
+
+    private IEnumerator RepeatArrowsCoroutine(RepeatingArrow repeatingArrow, Vector3 cachedShootDirection, Quaternion cachedRotation, float cachedDrawPercent)
+    {
+        yield return new WaitForSeconds(repeatingArrow.DelayBetweenShots);
+
+        int shotsLeft = repeatingArrow.AdditionalShots;
+
+        while (shotsLeft > 0)
+        {
+            // Nock new arrow
+            Arrow newArrow = ObjectPooler.Instance.SpawnFromPool(currentArrowType, firePoint.position, cachedRotation * Quaternion.Euler(0, 90, 0)).GetComponent<Arrow>();
+            SetupNockedArrow(newArrow);
+
+            // Animate pullback toward cached draw percent
+            yield return AnimateDraw(newArrow, cachedDrawPercent, repeatingArrow.DelayBetweenShots);
+
+            // Fire the arrow
+            FireArrow(newArrow, cachedShootDirection);
+
+            shotsLeft--;
+
+            // Wait for next shot if needed
+            if (shotsLeft > 0)
+            {
+                yield return new WaitForSeconds(repeatingArrow.DelayBetweenShots);
+            }
+        }
+    }
+
+    // Sets up a freshly nocked arrow before firing.
+    private void SetupNockedArrow(Arrow arrow)
+    {
+        arrow.ResetArrow();
+        arrow.Arrowhead = currentArrowheadIndex;
+        arrow.transform.SetParent(weaponTransform);
+        arrow.transform.localPosition = arrowRestPosition;
+        arrow.GetComponent<Rigidbody>().isKinematic = true;
+        arrow.GetComponent<Collider>().enabled = false;
+    }
+
+    // Animates the arrow pulling back towards a certain draw percent.
+    private IEnumerator AnimateDraw(Arrow arrow, float targetDrawPercent, float duration)
+    {
+        float elapsedTime = 0f;
+        Vector3 targetPosition = Vector3.Lerp(arrowRestPosition, arrowPulledPosition, targetDrawPercent);
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsedTime / duration);
+            arrow.transform.localPosition = Vector3.Lerp(arrowRestPosition, targetPosition, t);
+            yield return null;
+        }
+    }
+
+    // Fires the arrow by detaching, enabling physics, and adding force.
+    private void FireArrow(Arrow arrow, Vector3 direction)
+    {
+        arrow.transform.parent = null;
+        Rigidbody rb = arrow.GetComponent<Rigidbody>();
+        Collider col = arrow.GetComponent<Collider>();
+
+        rb.isKinematic = false;
+        col.enabled = true;
+        rb.AddForce(direction, ForceMode.VelocityChange);
+    }
+
 
     private void CancelDraw()
     {
@@ -261,10 +308,7 @@ public class WeaponController : MonoBehaviour
             currentArrowInstance = null;
         }
 
-        foreach (var point in trajectoryVisual)
-            point.SetActive(false);
-
-        trajectoryLineRenderer.enabled = false;
+        trajectoryVisuals.Hide();
     }
 
     private void PauseDraw(bool isPaused)
@@ -272,19 +316,9 @@ public class WeaponController : MonoBehaviour
         isDrawPaused = isPaused;
     }
 
-    private void UpdateTrajectory()
-    {
-        for (int i = 0; i < numberOfPoints; i++)
-        {
-            Vector3 pos = firePoint.position + shootDirection * (i * distanceBetweenPoints) + 0.5f * Physics.gravity * Mathf.Pow(i * distanceBetweenPoints, 2);
-            trajectoryVisual[i].transform.position = pos;
-            trajectoryLineRenderer.SetPosition(i, pos);
-        }
-    }
-
     private void ScrollArrow(float direction)
     {
-        if (isDrawing) return;
+        if (isDrawing || isShooting) return;
 
         int arrowTypeCount = allWeapons.Count;
         int currentIndex = (int)currentArrowType;
@@ -295,17 +329,17 @@ public class WeaponController : MonoBehaviour
 
     private void SelectArrow(int index)
     {
-        if (isDrawing) return;
+        if (isDrawing || isShooting) return;
 
         int arrowTypeCount = System.Enum.GetValues(typeof(ArrowType)).Length;
         //Index -1 so that if you press 1 numkey you get the basic arrow which is index 0
-        currentArrowType = (ArrowType)Mathf.Clamp(index -1 , 0, arrowTypeCount - 1);
+        currentArrowType = (ArrowType)Mathf.Clamp(index - 1, 0, arrowTypeCount - 1);
     }
 
 
     private void SelectArrowhead(int index)
     {
-        if (isDrawing) return;
+        if (isDrawing || isShooting) return;
         currentArrowheadIndex = (ArrowheadType)Mathf.Clamp(index, 0, 2);
     }
 
