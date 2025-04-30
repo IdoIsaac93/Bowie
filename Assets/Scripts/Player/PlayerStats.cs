@@ -1,9 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
-public class PlayerStats : MonoBehaviour
+public class PlayerStats : Singleton<PlayerStats>
 {
     // Movement
     [Header("Movement")]
@@ -18,6 +16,7 @@ public class PlayerStats : MonoBehaviour
 
     // Attack
     [Header("Attack")]
+    [SerializeField] private float criticalChance = 0.05f;
     [SerializeField] private float criticalMultiplier = 1.2f;
     [SerializeField] private float aimSpeed = 5f;
     [SerializeField] private float minLaunchVelocity = 1f;
@@ -60,6 +59,7 @@ public class PlayerStats : MonoBehaviour
     public float DodgeForce { get => dodgeForce; set => dodgeForce = value; }
     public float CurrentHealth { get => currentHealth; set => currentHealth = value; }
     public float MaxHealth { get => maxHealth; set => maxHealth = value; }
+    public float CriticalChance { get => criticalChance; set => criticalChance = value; }
     public float CriticalMultiplier { get => criticalMultiplier; set => criticalMultiplier = value; }
     public float AimSpeed { get => aimSpeed; set => aimSpeed = value; }
     public float MinLaunchVelocity { get => minLaunchVelocity; set => minLaunchVelocity = value; }
@@ -77,7 +77,17 @@ public class PlayerStats : MonoBehaviour
     public bool IsBlinded { get => isBlinded; set => isBlinded = value; }
     public float BlindSpotlightSize { get => blindSpotlightSize; set => blindSpotlightSize = value; }
 
-    private void Awake()
+
+    private void OnEnable()
+    {
+        EnemyHealth.OnEnemyDeath += GainXP;
+    }
+
+    private void OnDisable()
+    {
+        EnemyHealth.OnEnemyDeath -= GainXP;
+    }
+    private new void Awake()
     {
         TryGetComponent(out PlayerUI UI);
         if (UI == null)

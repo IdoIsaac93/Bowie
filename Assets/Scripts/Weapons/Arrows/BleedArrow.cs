@@ -13,19 +13,19 @@ public class BleedArrow : Arrow
     public float BleedDuration { get => bleedDuration; set => bleedDuration = value; }
     protected override void HandleCollision(Collider collider)
     {
-        if (!isFlying) return;
+        base.HandleCollision(collider);
 
-        float calculatedDamage = CalculateDamage(collider);
-
-        ApplyDamage(collider, calculatedDamage);
-
-        collider.TryGetComponent(out StatusEffectManager statusManager);
-        if (statusManager != null)
+        //Don't apply status effect if hit shield
+        if (!isShield)
         {
-            StatusEffect bleed = new BleedEffect(bleedDamage, bleedDuration, Arrowhead);
-            statusManager.AddEffect(bleed);
+            //Find the status effect manager
+            StatusEffectManager statusManager = collider.GetComponentInParent<StatusEffectManager>();
+            if (statusManager != null)
+            {
+                //Apply the status effect
+                StatusEffect bleed = new BleedEffect(bleedDamage, bleedDuration, Arrowhead);
+                statusManager.AddEffect(bleed);
+            }
         }
-
-        StickArrow(collider);
     }
 }

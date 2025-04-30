@@ -44,8 +44,8 @@ public class PierceArrow : Arrow
             ShieldController shield = collider.GetComponentInChildren<ShieldController>();
             if (shield != null)
             {
-                float shieldDamage = CalculateDamage(collider);
-                shield.TakeDamage(shieldDamage, arrowhead);
+                DamageInfo shieldDamage = CalculateDamage(collider);
+                shield.TakeDamage(shieldDamage);
             }
             // Do NOT add shield to hitEnemies
             return;
@@ -62,7 +62,7 @@ public class PierceArrow : Arrow
         EnemyHealth enemyHealth = collider.GetComponentInParent<EnemyHealth>();
         if (enemyHealth != null && !hitEnemies.Contains(enemyHealth.gameObject))
         {
-            float finalDamage = CalculateDamage(collider);
+            DamageInfo finalDamage = CalculateDamage(collider);
             ApplyDamage(collider, finalDamage);
             hitEnemies.Add(enemyHealth.gameObject);
             pierceAmount--;

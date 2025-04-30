@@ -1,36 +1,42 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
 public class EnemyHealth : MonoBehaviour, IDamageable
 {
+    //References
+    [Header("References")]
+    [SerializeField] private EnemyHealthBar healthBar;
+
     //Health
+    [Header("Health")]
     [SerializeField] private int maxHealth = 10;
     [SerializeField] private float currentHealth;
 
-    //UI
-    [SerializeField] private EnemyHealthBar healthBar;
-
     //Damage resistance/vulnerability
+    [Header("Resistances")]
     [SerializeField] private float negativeResistance = 0f;
     [SerializeField] private float piercingResistance = 0f;
     [SerializeField] private float positiveResistance = 0f;
 
-    //Player
-    private PlayerStats playerStats;
+    //Experience gain
+    [Header("Experience")]
     [SerializeField] private int experienceWorth = 10;
-
-    //Damage visual
-    private GameObject damageVisualObject;
+    public static event UnityAction<int> OnEnemyDeath;
 
     void Start()
     {
         healthBar = GetComponentInChildren<EnemyHealthBar>();
-        healthBar.SetMaxHealth(maxHealth);
+        if (healthBar != null)
+        {
+            healthBar.SetMaxHealth(maxHealth);
+        }
+        else
+        {
+            Debug.LogWarning("EnemyHealth is missing EnemyHealthBar reference");
+        }
         currentHealth = maxHealth;
-
-        damageVisualObject = Resources.Load<GameObject>("DamageVisual");
-        playerStats = GameObject.FindWithTag("Player").GetComponent<PlayerStats>();
     }
 
     void Update()
@@ -38,10 +44,10 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         healthBar.SetHealth((int)currentHealth);
     }
 
-    public void TakeDamage(float damage, ArrowheadType type)
+    public void TakeDamage(DamageInfo damageInfo)
     {
         float resistance = 0f;
-        switch (type)
+        switch (damageInfo.DamageType)
         {
             case ArrowheadType.Negative:
                 resistance = negativeResistance;
@@ -55,11 +61,19 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         }
 
         float resistanceMultiplier = 1f - (resistance / 100f);
-        damage *= resistanceMultiplier;
+        float damage = Mathf.Round(damageInfo.Amount * resistanceMultiplier);
 
-        damage = Mathf.Round(damage);
-        DamageVisual(damage , type);
-        
+        DamageInfo finalInfo = new DamageInfo(
+            damage,
+            damageInfo.IsCritical,
+            damageInfo.IsWeakspot,
+            damageInfo.IsShieldHit,
+            damageInfo.DamageType
+        );
+
+        //Create damage visual above enemy
+        DamageVisualController.ShowDamageVisual(finalInfo, transform.position);
+
         currentHealth -= damage;
         if (currentHealth <= 0)
         {
@@ -67,35 +81,9 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         }
     }
 
-    //Create damage visual above enemy
-    void DamageVisual(float damage, ArrowheadType type)
-    {
-        Vector3 posOffset = transform.position + new Vector3(0, 3, 0);
-        GameObject damageVisual = Instantiate(damageVisualObject, posOffset, Quaternion.identity);
-
-        //Change damage visual text to match damage done
-        TMPro.TextMeshProUGUI damageVisualText = damageVisual.GetComponentInChildren<TMPro.TextMeshProUGUI>();
-        damageVisualText.text = damage.ToString();
-
-        switch (type)
-        {
-            case ArrowheadType.Negative:
-                damageVisualText.color = Color.black;
-                break;
-            case ArrowheadType.Piercing:
-                //Hexadecimal FF9500
-                damageVisualText.color = new Color(1f, 0.584f, 0f);
-                break;
-            case ArrowheadType.Positive:
-                //Hexadecimal 00FFF9
-                damageVisualText.color = new Color(0f, 1f, 0.976f);
-                break;
-        }
-    }
-
     void Die()
     {
-        playerStats.ExperiencePoints += experienceWorth;
+        OnEnemyDeath?.Invoke(experienceWorth);
         Destroy(gameObject);
     }
 }

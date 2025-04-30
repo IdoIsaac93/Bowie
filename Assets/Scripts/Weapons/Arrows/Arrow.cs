@@ -2,10 +2,9 @@
 
 public class Arrow : MonoBehaviour
 {
+    //References
     protected Rigidbody rb;
     protected Collider col;
-    protected PlayerStats stats;
-    protected WeaponController weapon;
 
     //Flight
     [Header("Flight")]
@@ -15,9 +14,9 @@ public class Arrow : MonoBehaviour
     //Damage
     [Header("Damage Settings")]
     [SerializeField] protected ArrowheadType arrowhead;
-    protected float damage;
     [SerializeField] protected int minDamage = 1;
     [SerializeField] protected int maxDamage = 3;
+    protected float damage;
 
     //Cooldown
     [Header("Cooldown Settings")]
@@ -26,6 +25,8 @@ public class Arrow : MonoBehaviour
     //Manergy cost
     [Header("Manergy Cost")]
     [SerializeField] private int manergyCost = 0;
+
+    protected bool isShield;
 
     //Properties
     public ArrowheadType Arrowhead { get => arrowhead; set => arrowhead = value; }
@@ -39,16 +40,10 @@ public class Arrow : MonoBehaviour
         //Get components
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
-        GameObject player = GameObject.FindWithTag("Player");
-        stats = player.GetComponent<PlayerStats>();
-        weapon = player.GetComponent<WeaponController>();
 
         //Debugging in case reference is missing
         if (rb == null) { Debug.LogWarning("Arrow is missing Rigidbody reference"); }
         if (col == null) { Debug.LogWarning("Arrow is missing Collider reference"); }
-        if (player == null) { Debug.LogWarning("Arrow is missing Player reference"); }
-        if (stats == null) { Debug.LogWarning("Arrow is missing PlayerStats reference"); }
-        if (weapon == null) { Debug.LogWarning("Arrow is missing WeaponController reference"); }
     }
 
     protected virtual void Update()
@@ -73,39 +68,52 @@ public class Arrow : MonoBehaviour
     {
         if (!isFlying) return;
 
-        float calculatedDamage = CalculateDamage(collider);
+        DamageInfo calculatedDamage = CalculateDamage(collider);
 
         ApplyDamage(collider, calculatedDamage);
 
         StickArrow(collider);
     }
 
-    protected float CalculateDamage(Collider collider)
+    protected DamageInfo CalculateDamage(Collider collider)
     {
         float baseDamage = Random.Range(minDamage, maxDamage + 1);
+        bool isCritical = Random.value < PlayerStats.Instance.CriticalChance;
+        bool isWeakspot = collider.CompareTag("WeakSpot");
+        isShield = collider.CompareTag("EnemyShield");
 
-        if (collider.CompareTag("WeakSpot"))
+        if (isWeakspot)
         {
-            baseDamage *= stats.WeakSpotDamageMod;
+            baseDamage *= PlayerStats.Instance.WeakSpotDamageMod;
         }
 
-        return Mathf.Round(baseDamage);
+        if (isCritical)
+        {
+            baseDamage *= PlayerStats.Instance.CriticalMultiplier;
+        }
+
+        _ = Mathf.Round(baseDamage);
+
+        return new DamageInfo(baseDamage, isCritical, isWeakspot, isShield, arrowhead);
     }
 
-    protected void ApplyDamage(Collider collider, float damageAmount)
+    protected void ApplyDamage(Collider collider, DamageInfo damage)
     {
-        if (collider.CompareTag("EnemyShield"))
+        if (damage.IsShieldHit)
         {
             ShieldController shield = collider.GetComponentInChildren<ShieldController>();
             if (shield != null)
-                shield.TakeDamage(damageAmount, arrowhead);
+                shield.TakeDamage(damage);
         }
         else if (collider.CompareTag("WeakSpot") || collider.CompareTag("Enemy"))
         {
             EnemyHealth enemy = collider.GetComponentInParent<EnemyHealth>();
             if (enemy != null)
-                enemy.TakeDamage(damageAmount, arrowhead);
+                enemy.TakeDamage(damage);
         }
+
+        Debug.Log($"Arrow hit! Damage: {damage.Amount}, Crit: {damage.IsCritical}, Weakspot: {damage.IsWeakspot}, Shield: {damage.IsShieldHit}");
+
     }
 
     protected void StickArrow(Collider collider)
@@ -113,7 +121,8 @@ public class Arrow : MonoBehaviour
         isFlying = false;
         rb.isKinematic = true;
         col.enabled = false;
-        transform.parent = collider.transform;
+
+        transform.SetParent(collider.transform, true);
 
         Invoke(nameof(Deactivate), timeUntilDestroy);
     }

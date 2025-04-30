@@ -1,65 +1,65 @@
 using TMPro;
 using UnityEngine;
 
-public class DamageVisualController : MonoBehaviour
+public class DamageVisualController : Singleton<DamageVisualController>
 {
-    [Header("Movement and Lifetime")]
-    [SerializeField] private float timer = 0;
-    [SerializeField] private float timeUntillDestroy = 0.5f;
-    [SerializeField] private float risingSpeed = 5f;
-
     [Header("References")]
-    [SerializeField] private TextMeshProUGUI damageText;
+    private static GameObject damageVisualPrefab;
+    private static DamageVisual controller;
 
-    void Update()
+    public static void ShowDamageVisual(DamageInfo info, Vector3 originPosition)
     {
-        float verticalMovement = risingSpeed * Time.deltaTime;
-        transform.position += Vector3.up * verticalMovement;
-        timer += Time.deltaTime;
-        if (timer >= timeUntillDestroy)
+        if (damageVisualPrefab == null)
         {
-            gameObject.SetActive(false);
+            damageVisualPrefab = Resources.Load<GameObject>("DamageVisual/DamageVisual");
+            if (damageVisualPrefab == null)
+            {
+                Debug.LogError("DamageVisual prefab not found in Resources.");
+                return;
+            }
         }
+
+        Vector3 spawnPosition = originPosition + new Vector3(0, 3, 0);
+        GameObject visualInstance = Instantiate(damageVisualPrefab, spawnPosition, Quaternion.identity);
+        controller = visualInstance.GetComponent<DamageVisual>();
+        Setup(info);
     }
 
-    public void Setup(float damageAmount, bool isCritical, ArrowheadType damageType, bool isShieldHit, bool isWeakspotHit)
+    public static void Setup(DamageInfo info)
     {
-        timer = 0; // Reset timer
-        string text = damageAmount.ToString();
+        controller.Timer = 0; // Reset timer
+        string text = info.Amount.ToString();
 
-        // Handle Shield/Weakspot extra info
-        if (isShieldHit)
+        if (info.IsShieldHit)
             text += " Shielded";
-        if (isWeakspotHit)
+        if (info.IsWeakspot)
             text += " Weakspot";
 
-        // Set Color Priority
-        if (damageAmount < 0)
+        if (info.Amount < 0)
         {
             text += " Healed";
-            damageAmount = Mathf.Abs(damageAmount);
-            damageText.color = Color.green;
+            controller.DamageText.color = Color.green;
         }
-        else if (isCritical)
+        else if (info.IsCritical)
         {
-            damageText.color = Color.yellow;
+            controller.DamageText.color = Color.yellow;
         }
         else
         {
-            switch (damageType)
+            switch (info.DamageType)
             {
                 case ArrowheadType.Negative:
-                    damageText.color = new Color(0.5f, 0f, 0.5f); // purple
+                    controller.DamageText.color = new Color(0.5f, 0f, 0.5f); // Purple
                     break;
                 case ArrowheadType.Positive:
-                    damageText.color = Color.blue;
+                    controller.DamageText.color = Color.blue;
                     break;
                 case ArrowheadType.Piercing:
-                    damageText.color = Color.black;
+                    controller.DamageText.color = Color.black;
                     break;
             }
         }
 
-        damageText.text = text;
+        controller.DamageText.text = text;
     }
 }

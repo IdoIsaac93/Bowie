@@ -4,7 +4,7 @@ public class BombArrow : Arrow
 {
     [Header("Explosion Settings")]
     [SerializeField] private float explosionRadius = 5f;
-    [SerializeField] private float explosionForce = 5000f;
+    [SerializeField] private float explosionForce = 2500f;
     [SerializeField] private LayerMask damageableLayers;
     [SerializeField] private InputReader inputReader;
 
@@ -48,6 +48,7 @@ public class BombArrow : Arrow
         hasExploded = true;
 
         float explosionDamage = Random.Range(minDamage, maxDamage + 1);
+        DamageInfo damageInfo = new DamageInfo(explosionDamage, false, false, false, arrowhead);
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius, damageableLayers);
 
@@ -56,7 +57,7 @@ public class BombArrow : Arrow
             IDamageable damageable = hit.GetComponentInParent<IDamageable>();
             if (damageable != null)
             {
-                damageable.TakeDamage(explosionDamage, arrowhead);
+                damageable.TakeDamage(damageInfo);
             }
 
             Rigidbody rb = hit.GetComponentInParent<Rigidbody>();

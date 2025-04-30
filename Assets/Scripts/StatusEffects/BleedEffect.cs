@@ -2,27 +2,25 @@ using UnityEngine;
 
 public class BleedEffect : StatusEffect
 {
-    private float damagePerTick;
+    private DamageInfo damageInfo;
     private float tickInterval = 0.5f;
     private float tickTimer = 0f;
-    private ArrowheadType damageType;
 
     public BleedEffect(float damage, float duration, ArrowheadType type)
     {
-        this.damagePerTick = damage;
+        damageInfo = new DamageInfo(damage, false, false, false, type);
         this.duration = duration;
-        this.damageType = type;
     }
 
     public override void UpdateEffect(GameObject target)
     {
-        timer += Time.deltaTime;
+        base.UpdateEffect(target);
         tickTimer += Time.deltaTime;
 
         if (tickTimer >= tickInterval)
         {
             target.TryGetComponent(out IDamageable damageable);
-            damageable?.TakeDamage(damagePerTick, damageType);
+            damageable?.TakeDamage(damageInfo);
             tickTimer = 0f;
         }
     }

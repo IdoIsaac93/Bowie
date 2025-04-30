@@ -14,19 +14,13 @@ public class FreezeArrow : Arrow
 
     protected override void HandleCollision(Collider collider)
     {
-        if (!isFlying) return;
+        base.HandleCollision(collider);
 
-        float calculatedDamage = CalculateDamage(collider);
-
-        ApplyDamage(collider, calculatedDamage);
-
-        collider.TryGetComponent(out StatusEffectManager statusManager);
+        StatusEffectManager statusManager = collider.GetComponentInParent<StatusEffectManager>();
         if (statusManager != null)
         {
             StatusEffect freeze = new FreezeEffect(slowAmount, slowDuration);
             statusManager.AddEffect(freeze);
         }
-
-        StickArrow(collider);
     }
 }

@@ -5,6 +5,7 @@ public class StatusEffectManager : MonoBehaviour
 {
     private List<StatusEffect> activeEffects = new();
 
+    public List<StatusEffect> ActiveEffects { get =>  activeEffects; }
     void Update()
     {
         List<StatusEffect> effectsToRemove = new();
