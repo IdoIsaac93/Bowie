@@ -13,7 +13,7 @@ public class StatusEffectManager : MonoBehaviour
         foreach (StatusEffect effect in activeEffects)
         {
             effect.UpdateEffect(gameObject);
-            if (effect.Timer >= effect.duration)
+            if (effect.Timer >= effect.Duration)
             {
                 effect.EndEffect(gameObject);
                 effectsToRemove.Add(effect);
@@ -28,12 +28,20 @@ public class StatusEffectManager : MonoBehaviour
 
     public void AddEffect(StatusEffect newEffect)
     {
+        //Check if the enemy is immune to this status effect
+        if (TryGetComponent(out EnemyHealth immunity) &&
+        immunity.IsImmuneTo(newEffect.Type))
+        {
+            Debug.Log($"{gameObject.name} is immune to {newEffect.Type}.");
+            return;
+        }
+
         // If same type of effect already exists, refresh it instead of stacking
-        StatusEffect existing = activeEffects.Find(e => e.GetType() == newEffect.GetType());
+        StatusEffect existing = activeEffects.Find(e => e.Type == newEffect.Type);
         if (existing != null)
         {
             existing.Timer = 0f;
-            existing.duration = newEffect.duration;
+            existing.Duration = newEffect.Duration;
         }
         else
         {

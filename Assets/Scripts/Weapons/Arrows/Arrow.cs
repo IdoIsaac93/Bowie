@@ -8,7 +8,7 @@ public class Arrow : MonoBehaviour
 
     //Flight
     [Header("Flight")]
-    protected bool isFlying = true;
+    [SerializeField] protected bool isFlying = true;
     [SerializeField] protected float timeUntilDestroy = 8f;
 
     //Damage
@@ -17,6 +17,9 @@ public class Arrow : MonoBehaviour
     [SerializeField] protected int minDamage = 1;
     [SerializeField] protected int maxDamage = 3;
     protected float damage;
+    protected bool isShield;
+    protected bool isCritical;
+    protected bool isWeakspot;
 
     //Cooldown
     [Header("Cooldown Settings")]
@@ -25,8 +28,6 @@ public class Arrow : MonoBehaviour
     //Manergy cost
     [Header("Manergy Cost")]
     [SerializeField] private int manergyCost = 0;
-
-    protected bool isShield;
 
     //Properties
     public ArrowheadType Arrowhead { get => arrowhead; set => arrowhead = value; }
@@ -78,8 +79,8 @@ public class Arrow : MonoBehaviour
     protected DamageInfo CalculateDamage(Collider collider)
     {
         float baseDamage = Random.Range(minDamage, maxDamage + 1);
-        bool isCritical = Random.value < PlayerStats.Instance.CriticalChance;
-        bool isWeakspot = collider.CompareTag("WeakSpot");
+        isCritical = Random.value < PlayerStats.Instance.CriticalChance;
+        isWeakspot = collider.CompareTag("WeakSpot");
         isShield = collider.CompareTag("EnemyShield");
 
         if (isWeakspot)
@@ -129,6 +130,7 @@ public class Arrow : MonoBehaviour
 
     protected void Deactivate()
     {
+        ResetArrow();
         gameObject.SetActive(false);
     }
 
@@ -140,17 +142,16 @@ public class Arrow : MonoBehaviour
         rb.isKinematic = false;
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-        //Turn off physics so arrow doesn't fall while nocked
-        rb.isKinematic = true;
+
 
         // Reset collision
         if (col == null) col = GetComponent<Collider>();
-        col.enabled = false;
+        col.enabled = true;
 
         // Reset flying state
         isFlying = true;
 
-        // Unparent (optional - you might reparent manually later anyway)
+        // Unparent
         transform.parent = null;
     }
 }

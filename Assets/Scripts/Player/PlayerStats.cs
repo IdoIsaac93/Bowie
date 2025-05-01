@@ -14,6 +14,11 @@ public class PlayerStats : Singleton<PlayerStats>
     [SerializeField] private float currentHealth;
     [SerializeField] private float maxHealth = 100f;
 
+    //Manergy
+    [Header("Manergy")]
+    [SerializeField] private float currentManergy;
+    [SerializeField] private float maxManergy;
+
     // Attack
     [Header("Attack")]
     [SerializeField] private float criticalChance = 0.05f;
@@ -59,6 +64,8 @@ public class PlayerStats : Singleton<PlayerStats>
     public float DodgeForce { get => dodgeForce; set => dodgeForce = value; }
     public float CurrentHealth { get => currentHealth; set => currentHealth = value; }
     public float MaxHealth { get => maxHealth; set => maxHealth = value; }
+    public float CurrentManergy { get => currentManergy; set => currentManergy = value; }
+    public float MaxManergy { get => maxManergy; set => maxManergy = value; }
     public float CriticalChance { get => criticalChance; set => criticalChance = value; }
     public float CriticalMultiplier { get => criticalMultiplier; set => criticalMultiplier = value; }
     public float AimSpeed { get => aimSpeed; set => aimSpeed = value; }

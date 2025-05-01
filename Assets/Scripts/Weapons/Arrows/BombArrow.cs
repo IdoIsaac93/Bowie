@@ -13,17 +13,17 @@ public class BombArrow : Arrow
     //Properties
     public float ExplosionRadius { get => explosionRadius; set => explosionRadius = value; }
     public float ExplosionForce { get => explosionForce; set => explosionForce = value; }
-    protected override void Awake()
+
+    private void OnEnable()
     {
-        base.Awake();
         if (inputReader != null)
-        {
             inputReader.TriggerArrowEffect += Explode;
-        }
-        else
-        {
-            Debug.LogWarning("BombArrow is missing InputReader reference!");
-        }
+    }
+
+    private void OnDisable()
+    {
+        if (inputReader != null)
+            inputReader.TriggerArrowEffect -= Explode;
     }
 
     private void OnDestroy()

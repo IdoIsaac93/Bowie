@@ -8,6 +8,7 @@ public class BleedEffect : StatusEffect
 
     public BleedEffect(float damage, float duration, ArrowheadType type)
     {
+        this.type = StatusEffectType.Bleed;
         damageInfo = new DamageInfo(damage, false, false, false, type);
         this.duration = duration;
     }

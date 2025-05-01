@@ -7,6 +7,7 @@ public class FreezeEffect : StatusEffect
 
     public FreezeEffect(float slowAmount, float duration)
     {
+        this.type = StatusEffectType.Freeze;
         this.slowMultiplier = slowAmount;
         this.duration = duration;
     }

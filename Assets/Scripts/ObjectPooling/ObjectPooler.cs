@@ -4,6 +4,7 @@ using UnityEngine;
 public class ObjectPooler : MonoBehaviour
 {
     public static ObjectPooler Instance;
+    public Transform poolRoot;
 
     [System.Serializable]
     public class Pool
@@ -51,6 +52,7 @@ public class ObjectPooler : MonoBehaviour
         GameObject obj = poolDictionary[type].Dequeue();
 
         obj.SetActive(true);
+        obj.transform.SetParent(poolRoot);
         obj.transform.position = position;
         obj.transform.rotation = rotation;
 

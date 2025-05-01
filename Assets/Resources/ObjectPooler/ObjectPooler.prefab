@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1955783661073474134
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1621366039474948620}
+  - component: {fileID: 2910342972031353931}
+  m_Layer: 0
+  m_Name: ObjectPooler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1621366039474948620
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1955783661073474134}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.1342683, y: -0.9164999, z: 15.402199}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2910342972031353931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1955783661073474134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77b3dd6abbaebb841a941cef92a20be3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolRoot: {fileID: 1621366039474948620}
+  pools:
+  - arrowType: 0
+    prefab: {fileID: 6519708091346322745, guid: 5592d938b31f3434b980ceb58a555b3b, type: 3}
+    size: 10
+  - arrowType: 1
+    prefab: {fileID: 5943923391375677171, guid: 72ad21da880473e4d99af8a3724cf356, type: 3}
+    size: 10
+  - arrowType: 2
+    prefab: {fileID: 8459594757166925993, guid: c38470b783ae6864e9e28ff8e6044175, type: 3}
+    size: 10
+  - arrowType: 3
+    prefab: {fileID: 9151275444694007567, guid: 9264211d27cf99d4ea10e293436db529, type: 3}
+    size: 10
+  - arrowType: 4
+    prefab: {fileID: 460413705979054744, guid: bfc3a5f7240e2174d8e7f8aa32e9a410, type: 3}
+    size: 10
+  - arrowType: 5
+    prefab: {fileID: 3159418900019109067, guid: 1a3c24d257b70a14bb8fe7307f405c29, type: 3}
+    size: 10
+  - arrowType: 6
+    prefab: {fileID: 5076571600006032891, guid: 139b561812468c143888294ab3756a45, type: 3}
+    size: 10
+  - arrowType: 7
+    prefab: {fileID: 1873896556842372376, guid: 3cbf915ebb9e2074da2b933e4baea695, type: 3}
+    size: 10

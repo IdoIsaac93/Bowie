@@ -2,34 +2,78 @@ using UnityEngine;
 
 public class GuidedArrow : Arrow
 {
-    public float lifetime = 20f;
-    float lifetimeTimer = 0f;
+    [Header("Guidance Settings")]
+    [SerializeField] private float guideForce = 10f;
+    [SerializeField] private float manergyCostPerSecond = 5f;
+    [SerializeField] private InputReader inputReader;
 
-    public float guideAccuracy = 0.1f;
+    [SerializeField] private bool isGuiding = false;
 
-    new void Update()
+    public float GuideForce { get => guideForce; set => guideForce = value; }
+
+    private void OnEnable()
     {
-        //Rotates the arrow according to flight arc
-        if (isFlying && rb.linearVelocity.magnitude > 0)
-        {
-            Quaternion arcRotation = Quaternion.LookRotation(rb.linearVelocity.normalized);
-            transform.rotation = arcRotation;
+        if (inputReader != null)
+            inputReader.TriggerArrowEffect += ToggleGuiding;
+    }
 
-            if (Input.GetKey(KeyCode.Space))
-            {
-                // Adjust trajectory towards mouse cursor
-                Vector3 mousePosition = Input.mousePosition;
-                Vector3 mousePositionWorld = Camera.main.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, transform.position.z - Camera.main.transform.position.z));
-                Vector3 direction = (mousePositionWorld - transform.position).normalized;
-                rb.AddForce(direction * guideAccuracy, ForceMode.Force);
-            }
+    private void OnDisable()
+    {
+        if (inputReader != null)
+            inputReader.TriggerArrowEffect -= ToggleGuiding;
+    }
+
+    private void OnDestroy()
+    {
+        if (inputReader != null)
+        {
+            inputReader.TriggerArrowEffect -= ToggleGuiding;
+        }
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+
+        if (isFlying && isGuiding)
+        {
+            GuideTowardsMouse();
+        }
+    }
+
+    private void ToggleGuiding()
+    {
+        Debug.Log("Guiding toggled");
+        if (!isFlying || PlayerStats.Instance.CurrentManergy < manergyCostPerSecond) return;
+
+        isGuiding = !isGuiding;
+        // You may want to set a timer to stop this if needed.
+    }
+
+    private void GuideTowardsMouse()
+    {
+        // Deduct manergy per second
+        float manergyCostThisFrame = manergyCostPerSecond * Time.deltaTime;
+
+        if (PlayerStats.Instance.CurrentManergy < manergyCostThisFrame)
+        {
+            isGuiding = false;
+            return;
         }
 
-        //Destroy arrow after lifetime
-        lifetimeTimer += Time.deltaTime;
-        if (lifetimeTimer >= lifetime)
-        {
-            Destroy(gameObject);
-        }
+        PlayerStats.Instance.CurrentManergy -= manergyCostThisFrame;
+
+        Vector3 mousePos = Input.mousePosition;
+        mousePos.z = transform.position.z - Camera.main.transform.position.z;
+        Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(mousePos);
+        Vector3 direction = (worldMousePos - transform.position).normalized;
+
+        rb.AddForce(direction * guideForce, ForceMode.Force);
+    }
+
+    public override void ResetArrow()
+    {
+        base.ResetArrow();
+        isGuiding = false;
     }
 }

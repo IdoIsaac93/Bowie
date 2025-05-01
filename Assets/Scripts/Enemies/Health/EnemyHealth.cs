@@ -1,6 +1,5 @@
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.Events;
 
 public class EnemyHealth : MonoBehaviour, IDamageable
@@ -19,6 +18,10 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     [SerializeField] private float negativeResistance = 0f;
     [SerializeField] private float piercingResistance = 0f;
     [SerializeField] private float positiveResistance = 0f;
+
+    //Status Effect immunities
+    [Header("Status Effects Immunity")]
+    [SerializeField] private List<StatusEffectType> immuneEffects = new();
 
     //Experience gain
     [Header("Experience")]
@@ -79,6 +82,12 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         {
             Die();
         }
+    }
+
+    //Checks if the enemy is immune to a certain effect
+    public bool IsImmuneTo(StatusEffectType type)
+    {
+        return immuneEffects.Contains(type);
     }
 
     void Die()

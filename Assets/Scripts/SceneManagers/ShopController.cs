@@ -299,7 +299,7 @@ public class ShopController : MonoBehaviour
         {
             Pay(price);
 
-            guidedArrow.guideAccuracy += 2;
+            guidedArrow.GuideForce += 2f;
         }
     }
 

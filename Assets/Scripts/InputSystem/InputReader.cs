@@ -124,7 +124,7 @@ public class InputReader : ScriptableObject, IPlayerActions
 
     public void OnTriggerArrowEffect(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.started)
             TriggerArrowEffect?.Invoke();
     }
 
